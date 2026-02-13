@@ -6,8 +6,10 @@ from storage import Storage
 # TODO: Implementovat dekorátor @log_action (zapsat do history.log)
 def log_action(func):
     def wrapper(*args, **kwargs):
-        # ... logika logování ...
-        return func(*args, **kwargs)
+        result = func(*args, **kwargs)
+        with open("history.log", "a", encoding="utf-8") as log_file:
+            log_file.write(f"Action: {func.__name__}, Args: {args[1:]}, Kwargs: {kwargs}\n")
+        return result
     return wrapper
 
 class InventoryManager:
@@ -18,18 +20,33 @@ class InventoryManager:
     @log_action
     def add_product(self, name: str, price: float, quantity: int):
         # TODO: Vytvořit produkt, přidat do self.products, uložit
+        product = Product(name, price, quantity)
+        self.products.append(product)
+        self.storage.save_products(self.products)
         print(f"Produkt {name} přidán.")
 
     def list_products(self):
         # TODO: Vypsat všechny produkty
-        pass
+        if not self.products:
+            print("Žádné produkty ve skladu.")
+            return
+        for product in self.products:
+            print(product)
 
     def search_products(self, query: str):
         # TODO: Vyhledat produkty obsahující query v názvu
+        results = [p for p in self.products if query.lower() in p._name.lower()]
+        if not results:
+            print("Nebyly nalezeny žádné produkty.")
+            return
+        for product in results:
+            print(product)
         pass
     
     def total_value(self):
         # TODO: Spočítat celkovou hodnotu
+        total = sum(p.price * p.quantity for p in self.products)
+        print(f"Celková hodnota skladu: {total:.2f} Kč")
         pass
 
 def main():
@@ -61,6 +78,8 @@ def main():
     elif args.command == "search":
         manager.search_products(args.query)
     # TODO: Další příkazy
+    elif args.command == "total":
+        manager.total_value()
     else:
         parser.print_help()
 
