@@ -35,19 +35,17 @@ class InventoryManager:
 
     def search_products(self, query: str):
         # TODO: Vyhledat produkty obsahující query v názvu
-        results = [p for p in self.products if query.lower() in p._name.lower()]
+        results = [p for p in self.products if query.lower() in p.name.lower()]
         if not results:
             print("Nebyly nalezeny žádné produkty.")
             return
         for product in results:
             print(product)
-        pass
     
     def total_value(self):
         # TODO: Spočítat celkovou hodnotu
         total = sum(p.price * p.quantity for p in self.products)
         print(f"Celková hodnota skladu: {total:.2f} Kč")
-        pass
 
 def main():
     parser = argparse.ArgumentParser(description="Systém správy skladu")

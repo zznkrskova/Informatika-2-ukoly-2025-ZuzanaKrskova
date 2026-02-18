@@ -19,6 +19,8 @@ class Storage:
         try:
             with open(self.filename, 'r', encoding='utf-8') as f:
                 data = json.load(f)
+                if not isinstance(data, list):
+                    return []
                 return [Product.from_dict(item) for item in data]
         except (FileNotFoundError, json.JSONDecodeError):
             return []

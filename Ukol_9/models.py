@@ -4,8 +4,9 @@ class Product:
     """
     
     def __init__(self, name: str, price: float, quantity: int):
-        # TODO: Inicializace, využití properties pro validaci
-        self.name = name
+        if not isinstance(name, str) or name.strip() == "":
+            raise ValueError("Jméno nemůže být prázdné.")
+        self._name = name
         self.price = price
         self.quantity = quantity
     
@@ -15,8 +16,7 @@ class Product:
 
     @name.setter
     def name(self, value: str):
-        # TODO: Validace
-        if not value or value.strip() == "":
+        if not isinstance(value, str) or value.strip() == "":
             raise ValueError("Jméno nemůže být prázdné.")
         self._name = value
 
@@ -26,7 +26,6 @@ class Product:
 
     @price.setter
     def price(self, value: float):
-        # TODO: Validace, raise ValueError pokud < 0
         if value < 0:
             raise ValueError("Cena nemůže být záporná.")
         else:
@@ -38,7 +37,6 @@ class Product:
 
     @quantity.setter
     def quantity(self, value: int):
-        # TODO: Validace
         if value < 0:
             raise ValueError("Množství nemůže být záporné.")
         else:
@@ -48,8 +46,8 @@ class Product:
         """Vrátí slovníkovou reprezentaci pro JSON."""
         return {
             "name": self._name,
-            "price": self._price,
-            "quantity": self._quantity,
+            "price": self.price,
+            "quantity": self.quantity,
         }
 
     @staticmethod
@@ -58,5 +56,4 @@ class Product:
         return Product(data['name'], data['price'], data['quantity'])
 
     def __str__(self) -> str:
-        # TODO: Hezký výpis
-        return f"Produkt: {self._name}, Cena: {self._price:.2f}, Množství: {self._quantity}"
+        return f"Produkt: {self._name}, Cena: {self.price:.2f}, Množství: {self.quantity}"
