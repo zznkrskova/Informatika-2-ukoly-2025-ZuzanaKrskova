@@ -2,22 +2,21 @@ class Product:
     """
     Reprezentuje produkt ve skladu.
     """
-    
     def __init__(self, name: str, price: float, quantity: int):
-        if not isinstance(name, str) or name.strip() == "":
-            raise ValueError("Jméno nemůže být prázdné.")
-        self._name = name
+        # TODO: Inicializace, využití properties pro validaci
+        self.name = name
         self.price = price
         self.quantity = quantity
-    
+
     @property
     def name(self) -> str:
         return self._name
 
     @name.setter
     def name(self, value: str):
-        if not isinstance(value, str) or value.strip() == "":
-            raise ValueError("Jméno nemůže být prázdné.")
+        # TODO: Validace, raise ValueError pokud je prázdné
+        if not value or value == "":
+            raise ValueError("Jméno nesmí být prázdné.")
         self._name = value
 
     @property
@@ -26,10 +25,10 @@ class Product:
 
     @price.setter
     def price(self, value: float):
+        # TODO: Validace, raise ValueError pokud < 0
         if value < 0:
-            raise ValueError("Cena nemůže být záporná.")
-        else:
-            self._price = value
+            raise ValueError("Cena nesmí být záporná.")
+        self._price = value
 
     @property
     def quantity(self) -> int:
@@ -37,17 +36,17 @@ class Product:
 
     @quantity.setter
     def quantity(self, value: int):
+        # TODO: Validace, raise ValueError pokud < 0
         if value < 0:
-            raise ValueError("Množství nemůže být záporné.")
-        else:
-            self._quantity = value
-    
+            raise ValueError("Množství nesmí být záporné.")
+        self._quantity = value
+
     def to_dict(self) -> dict:
         """Vrátí slovníkovou reprezentaci pro JSON."""
         return {
             "name": self._name,
-            "price": self.price,
-            "quantity": self.quantity,
+            "price": self._price,
+            "quantity": self._quantity
         }
 
     @staticmethod
@@ -56,4 +55,5 @@ class Product:
         return Product(data['name'], data['price'], data['quantity'])
 
     def __str__(self) -> str:
-        return f"Produkt: {self._name}, Cena: {self.price:.2f}, Množství: {self.quantity}"
+        # TODO: Hezký výpis
+        return f"{self._name}: {self._price} Kč, {self._quantity} ks"
